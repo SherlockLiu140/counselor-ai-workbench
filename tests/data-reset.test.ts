@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import type { V1Student } from "../src/engine/types";
+import type { Student as V1Student } from "../src/engine/types";
 import {
   V2MemoryStore,
   importV1Students,
@@ -25,7 +25,7 @@ describe("resetV2Space（恢复出厂）", () => {
       type: "缺勤",
       occurredAt: "2026-09-14",
       sourceType: "teacher",
-      detail: "上午未到校",
+      facts: "上午未到校",
       needsConversation: false,
       needsFollowUp: false,
       priority: "medium",
