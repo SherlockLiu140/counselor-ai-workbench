@@ -2770,3 +2770,66 @@
   font-size: 12px;
   padding: 6px 11px;
 }
+
+/* —— 清除全部数据（危险区） —— */
+.v2-sidebar-foot .danger-link {
+  color: var(--danger-600);
+}
+
+.reset-warning {
+  padding: 10px 12px;
+  border: 1px solid var(--danger-200);
+  background: var(--accent-50);
+  color: var(--danger-600);
+  font-size: 12px;
+  line-height: 1.7;
+  border-radius: 4px;
+}
+
+.reset-steps {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.reset-steps li {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.reset-steps li p {
+  margin: 6px 0 8px;
+  color: var(--faint);
+  line-height: 1.7;
+}
+
+.reset-steps button {
+  font-size: 12px;
+  padding: 7px 12px;
+}
+
+.reset-steps button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.reset-steps .danger-button,
+.reset-skip .danger-button {
+  background: var(--danger-600);
+  border-color: var(--danger-600);
+  color: #fff;
+}
+
+.reset-skip {
+  margin: 12px 0 0;
+  font-size: 11px;
+  color: var(--faint);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}

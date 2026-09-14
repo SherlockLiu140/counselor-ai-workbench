@@ -433,6 +433,36 @@ export class V2IndexedStore implements V2LocalStore {
   close() {
     this.db.close();
   }
+  /**
+   * 危险操作（如清除全部数据）前的最后一道防线：
+   * 把当前空间完整快照写进 `backups` 对象库，留在用户本机数据库里。
+   * 即使文件备份被误删，数据库里仍有一份可找回的历史。
+   */
+  snapshotBackup(label: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(["v2-space", "backups"], "readwrite");
+      const read = tx.objectStore("v2-space").get("active");
+      read.onsuccess = () => {
+        try {
+          tx.objectStore("backups").put(
+            {
+              createdAt: now(),
+              sourceVersion: 2,
+              label,
+              data: structuredClone(read.result),
+            },
+            `pre-clear-${Date.now()}`,
+          );
+        } catch (error) {
+          tx.abort();
+          reject(error);
+        }
+      };
+      tx.oncomplete = () => resolve();
+      tx.onabort = tx.onerror = () =>
+        reject(new Error("本地快照失败，为保数据安全已中止清除。"));
+    });
+  }
 }
 
 export async function importV1Students(
@@ -484,6 +514,16 @@ export async function importV1Students(
 
 export function createId(prefix: string) {
   return `${prefix}:${crypto.randomUUID()}`;
+}
+
+/**
+ * 恢复出厂：清空全部业务数据，仅保留默认谈话模板与空数据结构。
+ * 只应由「清除全部数据」流程调用，调用前必须完成强制备份（见 App.tsx）。
+ */
+export async function resetV2Space(store: V2LocalStore) {
+  return store.update((state) => {
+    Object.assign(state, emptyV2Space());
+  });
 }
 
 export async function addConversationTemplate(

@@ -729,3 +729,21 @@ bash scripts/package-nsis.sh --skip-frontend --small  # online：安装时下载
 `src-tauri/src/lib.rs`、`src/v2/desktop.ts`（新）、`src/v2/DesktopDiag.tsx`（新）、`src/main.tsx`、
 `src/v2/{clipboard,export,materials,App,AiSettingsPane,PrivacyGateway,MaterialsPane,AiPolishDialog,TemplateManager}.tsx?`、
 `src/components/{rosterTemplateFile,RosterPane}.tsx`、`tests/talk-records.test.ts`、`scripts/package-nsis.sh`、README。
+
+## 2026-09-14 补2：清除全部数据（强制备份）+ 演示数据说明
+
+老师演示后提出两点：演示数据要能清理；清除数据的入口必须**强制先备份**。
+
+### 结论与实现
+
+- **演示数据本就不会残留**：`?mode=demo` 与 `?mode=session` 走 `V2MemoryStore`（纯内存），
+  刷新即消失，不写 IndexedDB。已在侧栏脚注写明，不设独立清理入口（`docs/USER_GUIDE.md` 也有 FAQ）。
+- **新增「清除全部数据」流程**（侧栏底部入口，演示/会话模式隐藏）：
+  1. 第一步强制导出完整备份文件（`exportLocalBackup` 改为返回是否成功）；
+     **备份成功前「永久清除」按钮 disabled**；
+  2. 逃生口「无需备份，直接清除」需**连点 3 次**（界面显示剩余次数）；
+  3. 即便走逃生口，`V2IndexedStore.snapshotBackup()` 也会先把当前空间写进
+     IndexedDB `backups` 库（键 `pre-clear-<ts>`）作为应用内最后防线；
+  4. `resetV2Space()` 恢复出厂：业务数组清空、隐私代号重置、默认谈话模板还原。
+- 样式：`.reset-warning` / `.reset-steps` / `.danger-button` / `.danger-link`（只用语义色 `--danger-*`，无阴影）。
+- 测试：新增 `tests/data-reset.test.ts`（清空结构、默认模板还原、清除后可重导入）。225 项单测通过。

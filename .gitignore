@@ -10,3 +10,4 @@ public/pdf/
 src-tauri/target/
 src-tauri/gen/schemas/
 .workbuddy/
+*.zip

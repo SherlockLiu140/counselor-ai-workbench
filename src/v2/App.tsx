@@ -48,6 +48,7 @@ import {
   emptyV2Space,
   importV1Students,
   registerEvent,
+  resetV2Space,
   updateStudentCare,
   type V2LocalStore,
 } from "./store";
@@ -223,6 +224,15 @@ export default function App() {
   const [systemLinkEditing, setSystemLinkEditing] = useState(false);
   const [systemLinkDraft, setSystemLinkDraft] = useState("");
   const [systemLinkError, setSystemLinkError] = useState("");
+  /**
+   * 「清除全部数据」流程。红线：文件备份完成前，「永久清除」不可用；
+   * 逃生口「无需备份」必须连点 3 次才放行，且即便如此也会在本地数据库留快照。
+   */
+  const [resetOpen, setResetOpen] = useState(false);
+  const [resetBackupDone, setResetBackupDone] = useState(false);
+  const [resetBackupBusy, setResetBackupBusy] = useState(false);
+  const [resetSkipCount, setResetSkipCount] = useState(0);
+  const [resetBusy, setResetBusy] = useState(false);
   const store = useRef<V2LocalStore | null>(null);
 
   function commitStudentSystemUrl() {
@@ -331,7 +341,7 @@ export default function App() {
     }, "已由待办建立谈话事项，填写谈话记录后会自动生成后续复查待办。");
     if (next) setTalkEventId(next.events[0]?.id);
   }
-  /** 导出完整本地备份：桌面端写入「下载」目录，浏览器端走 Blob 下载。 */
+  /** 导出完整本地备份：桌面端写入「下载」目录，浏览器端走 Blob 下载。返回是否成功。 */
   async function exportLocalBackup() {
     try {
       const path = await saveExportFile(
@@ -344,8 +354,47 @@ export default function App() {
           ? `已导出完整本地备份到下载文件夹：${path.split(/[\\/]/).pop()}。文件可能含学生资料，请妥善保管。`
           : "已导出完整本地备份。文件可能含学生资料，请妥善保管。",
       );
+      return true;
     } catch (e) {
       setError(`备份导出失败：${(e as Error).message}`);
+      return false;
+    }
+  }
+  /** 打开「清除全部数据」流程。演示 / 会话模式数据只在内存里，不提供此入口。 */
+  function openResetDialog() {
+    setResetBackupDone(false);
+    setResetBackupBusy(false);
+    setResetSkipCount(0);
+    setResetBusy(false);
+    setResetOpen(true);
+  }
+  /** 第一步：强制导出文件备份；成功后「永久清除」才解锁。 */
+  async function backupThenArmReset() {
+    setResetBackupBusy(true);
+    const ok = await exportLocalBackup();
+    setResetBackupBusy(false);
+    if (ok) setResetBackupDone(true);
+  }
+  /**
+   * 最终清除。即便用户走「无需备份」逃生口，也先把当前空间快照写进本地
+   * 数据库的 backups 库（应用内最后防线），再恢复出厂。
+   */
+  async function performReset() {
+    const local = store.current;
+    if (!local) return;
+    setResetBusy(true);
+    try {
+      if (local instanceof V2IndexedStore)
+        await local.snapshotBackup(`清除前自动快照 · ${isoDay()}`);
+      await commit(
+        () => resetV2Space(local),
+        "已恢复出厂状态：全部业务数据已清除，默认谈话模板已还原。",
+      );
+      setResetOpen(false);
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setResetBusy(false);
     }
   }
   /** 导出若干条谈话记录为 Markdown：纯本地写文件，不上传、不联网。 */
@@ -524,10 +573,19 @@ export default function App() {
                 ? "仅本次会话"
                 : "本机数据空间"}
           </span>
-          <p>完整资料仅在本地查看；点击 AI 功能时才进入隐私网关。</p>
+          <p>
+            {demo || session
+              ? "演示 / 会话数据仅存于内存，刷新或关闭页面即全部清除，不会写入本机数据库。"
+              : "完整资料仅在本地查看；点击 AI 功能时才进入隐私网关。"}
+          </p>
           <button className="link-button" onClick={exportLocalBackup}>
             导出完整本地备份
           </button>
+          {!demo && !session && (
+            <button className="link-button danger-link" onClick={openResetDialog}>
+              清除全部数据…
+            </button>
+          )}
         </div>
       </aside>
       <section className="v2-workspace">
@@ -855,6 +913,70 @@ export default function App() {
             }
           }}
         />
+      )}
+      {resetOpen && (
+        <Modal title="清除全部数据" onCancel={() => !resetBusy && setResetOpen(false)}>
+          <div className="reset-warning" role="alert">
+            <b>此操作不可恢复。</b>
+            将清除本机数据空间中的全部内容：花名册与学生档案、事件、待办、谈心谈话、
+            材料归档、评奖评优与升学就业数据，并还原默认谈话模板。
+          </div>
+          <ol className="reset-steps">
+            <li>
+              <b>第一步 · 强制备份</b>
+              <p>
+                先把完整备份文件导出到「下载」目录（含全部学生资料，请妥善保管）。
+                备份成功后才能进行下一步。
+              </p>
+              <button
+                disabled={resetBackupBusy || resetBackupDone}
+                onClick={backupThenArmReset}
+              >
+                {resetBackupBusy
+                  ? "正在导出备份…"
+                  : resetBackupDone
+                    ? "✓ 备份文件已导出"
+                    : "导出完整备份，解锁下一步"}
+              </button>
+            </li>
+            <li>
+              <b>第二步 · 永久清除</b>
+              <p>
+                清除时应用还会在本机数据库里自动留存一份「清除前快照」作为最后防线。
+              </p>
+              <button
+                className="danger-button"
+                disabled={!resetBackupDone || resetBusy}
+                onClick={performReset}
+              >
+                {resetBusy ? "正在清除…" : "永久清除全部数据"}
+              </button>
+            </li>
+          </ol>
+          <p className="reset-skip">
+            确实不需要备份文件？
+            <button
+              className="link-button"
+              disabled={resetBusy}
+              onClick={() => setResetSkipCount((n) => n + 1)}
+            >
+              {resetSkipCount === 0
+                ? "无需备份，直接清除（需连点 3 次）"
+                : resetSkipCount < 3
+                  ? `已点 ${resetSkipCount} 次，再点 ${3 - resetSkipCount} 次确认`
+                  : "已确认无需备份"}
+            </button>
+            {resetSkipCount >= 3 && (
+              <button
+                className="danger-button"
+                disabled={resetBusy}
+                onClick={performReset}
+              >
+                {resetBusy ? "正在清除…" : "永久清除（跳过文件备份，仍保留数据库快照）"}
+              </button>
+            )}
+          </p>
+        </Modal>
       )}
       {talkComposer && (
         <NewTalkForm
