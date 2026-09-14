@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-09-10T02:14:53.262Z",
+  "file": "/Users/sherlockliu/Desktop/工作/班主任工作/班主任AI工作台/dist-presentation/优秀班主任AI汇报.html",
+  "sizeBytes": 226577,
+  "standaloneFiles": 1,
+  "browsers": [
+    {
+      "engine": "Chromium",
+      "protocol": "file:",
+      "slidesVisited": 15,
+      "projectionSizes": [
+        "1366x768",
+        "1920x1080"
+      ],
+      "keyboardNavigation": "passed",
+      "speakerNotes": "passed",
+      "animation": "passed",
+      "fullscreen": "entered-and-escaped",
+      "offlineReload": "passed",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "networkRequests": []
+    },
+    {
+      "engine": "WebKit",
+      "protocol": "file:",
+      "slidesVisited": 15,
+      "projectionSizes": [
+        "1366x768",
+        "1920x1080"
+      ],
+      "keyboardNavigation": "passed",
+      "speakerNotes": "passed",
+      "animation": "passed",
+      "fullscreen": "entered-and-escaped",
+      "offlineReload": "not-tested",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "networkRequests": []
+    }
+  ]
+}

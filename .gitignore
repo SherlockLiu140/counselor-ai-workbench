@@ -1,0 +1,12 @@
+node_modules/
+dist/
+dist-desktop/
+test-results/
+playwright-report/
+.DS_Store
+*.local
+public/pdf/
+*.tsbuildinfo
+src-tauri/target/
+src-tauri/gen/schemas/
+.workbuddy/

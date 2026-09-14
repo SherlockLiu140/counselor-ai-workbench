@@ -1,0 +1,1007 @@
+/* ==========================================================================
+   班主任 AI 工作台 · 通用组件层
+   依赖 styles.css 中的设计标记。仅视觉与布局调整，类名与选择器保持兼容。
+   ========================================================================== */
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.section-title h2,
+.section-title h3,
+.section-title p {
+  margin-bottom: 0;
+}
+
+.section-title .eyebrow {
+  display: block;
+  margin-bottom: 7px;
+}
+
+label {
+  display: block;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+input:not([type="checkbox"]):not([type="file"]),
+select,
+textarea {
+  display: block;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  padding: 9px 11px;
+  background: var(--surface);
+  color: var(--ink-2);
+  width: 100%;
+  margin-top: 6px;
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    background 0.16s ease;
+}
+
+input:not([type="checkbox"]):not([type="file"]):hover,
+select:hover,
+textarea:hover {
+  border-color: var(--brand-300);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--brand-500);
+  width: 15px;
+  height: 15px;
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.85;
+  min-height: 100px;
+}
+
+textarea:focus,
+input:focus,
+select:focus {
+  outline: 2px solid var(--brand-400);
+  border-color: var(--brand-400);
+  box-shadow: var(--ring);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 18px 0;
+}
+
+.field-grid.two {
+  grid-template-columns: 1fr 1fr;
+}
+
+.input-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 18px 0 12px;
+}
+
+.input-toolbar select {
+  width: auto;
+  margin: 0;
+}
+
+.file-button {
+  display: inline-block;
+  border: 1px solid var(--brand-200);
+  padding: 8px 14px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  color: var(--brand-600);
+  background: var(--brand-50);
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.file-button:hover {
+  background: var(--brand-100);
+}
+
+.file-button input {
+  display: block;
+  font-size: 11px;
+  max-width: 240px;
+  margin-top: 6px;
+}
+
+.source-label {
+  margin-top: 16px;
+}
+
+.source-label textarea {
+  padding: 15px 16px;
+  font-size: 14px;
+  background: var(--surface-2);
+  line-height: 1.9;
+}
+
+.redaction-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.75;
+}
+
+.check input {
+  margin-top: 5px;
+}
+
+.input-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--line-soft);
+  margin-top: 22px;
+  padding-top: 18px;
+}
+
+.voice-tip {
+  background: var(--surface-sunken);
+  border: 1px solid var(--line-soft);
+  padding: 12px 15px;
+  border-radius: var(--r-md);
+  font-size: 13px;
+}
+
+.voice-tip p {
+  margin: 12px 0 0;
+}
+
+details {
+  margin: 14px 0;
+}
+
+summary {
+  cursor: pointer;
+  color: var(--brand-600);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+summary:hover {
+  color: var(--brand-700);
+}
+
+details p {
+  margin-top: 12px;
+}
+
+.inline-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.inline-form label {
+  flex: 1;
+  min-width: 0;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.button-row button {
+  font-size: 12px;
+  padding: 6px 11px;
+}
+
+.review {
+  padding-top: 26px;
+  scroll-margin-top: 20px;
+}
+
+.comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 18px 0;
+}
+
+.comparison .panel {
+  margin: 0;
+}
+
+.comparison h3 {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.text-preview {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    13px/2 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif;
+  margin: 0;
+  max-height: 470px;
+  overflow: auto;
+  color: var(--text);
+}
+
+mark {
+  background: var(--brand-100);
+  color: var(--brand-700);
+  border-radius: 3px;
+  padding: 1px 2px;
+  box-decoration-break: clone;
+}
+
+mark.restored {
+  background: var(--amber-100);
+  color: var(--amber-700);
+}
+
+.finding-list {
+  border-top: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+
+.finding {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+  padding: 18px 16px;
+  background: var(--surface);
+}
+
+.finding-info b {
+  display: block;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.finding-info p {
+  font-size: 12px;
+  margin: 6px 0;
+}
+
+.finding-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.finding-controls select {
+  max-width: 230px;
+}
+
+.confirm-panel {
+  background: var(--brand-50);
+  border-color: var(--brand-200);
+}
+
+.confirm-panel p {
+  font-size: 13px;
+}
+
+.confirm-panel > .check {
+  margin: 20px 0;
+}
+
+.output-actions {
+  border-top: 1px solid var(--brand-200);
+  padding-top: 16px;
+  margin-top: 20px;
+}
+
+.output-actions button {
+  font-size: 13px;
+}
+
+.confirm-panel [role="status"] {
+  display: block;
+  font-size: 13px;
+  margin-top: 16px;
+  color: var(--brand-600);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stats-grid h2 {
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+}
+
+.table-scroll {
+  max-width: 100%;
+  overflow: auto;
+  margin: 16px 0;
+  border-radius: var(--r-md);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.workflow-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.7fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.workflow-catalog {
+  padding: 14px;
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 36px);
+  overflow: auto;
+}
+
+.template-library-tools {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.template-library-tools button,
+.template-import-button {
+  display: grid;
+  place-items: center;
+  min-height: 34px;
+  padding: 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--brand-600);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.template-import-button input {
+  display: none;
+}
+
+.template-library-note,
+.template-library-status {
+  margin: 0 0 12px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.template-library-status {
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  background: var(--brand-50);
+  color: var(--brand-600);
+}
+
+.workflow-tabs,
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+.workflow-tabs button {
+  padding: 5px 10px;
+  font-size: 11px;
+}
+
+.template-list {
+  display: grid;
+  gap: 5px;
+}
+
+.template-list button {
+  text-align: left;
+  border: 0;
+  box-shadow: none;
+  padding: 12px 13px;
+  background: transparent;
+  border-radius: var(--r-sm);
+}
+
+.template-list button.active {
+  background: var(--brand-100);
+  color: var(--brand-700);
+  font-weight: 600;
+}
+
+.template-list b,
+.template-list span,
+.template-list small {
+  display: block;
+}
+
+.template-list span {
+  margin: 4px 0;
+  color: var(--faint);
+  font-size: 12px;
+}
+
+.template-empty {
+  padding: 18px 13px;
+  border-radius: var(--r-sm);
+  color: var(--muted);
+  background: var(--surface-sunken);
+}
+
+.template-empty b,
+.template-empty span {
+  display: block;
+}
+
+.template-empty span {
+  margin-top: 5px;
+  font-size: 11px;
+}
+
+.workflow-fields {
+  display: grid;
+  gap: 16px;
+}
+
+.workflow-fields label > span {
+  color: var(--danger-600);
+}
+
+.workflow-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.workflow-form-actions button {
+  padding: 6px 11px;
+  font-size: 12px;
+}
+
+.workflow-example-note {
+  margin: 14px 0 0;
+  padding: 10px 13px;
+  border-left: 3px solid var(--brand-300);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  background: var(--surface-sunken);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.template-editor-section {
+  margin: 22px 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.template-editor-section .section-title p {
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.template-field-list {
+  display: grid;
+  gap: 10px;
+}
+
+.template-field-row {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 0.75fr auto auto;
+  gap: 9px;
+  align-items: end;
+  padding: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+
+.template-field-row input,
+.template-field-row select,
+.template-field-row textarea {
+  min-height: 38px;
+}
+
+.template-required {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  white-space: nowrap;
+}
+
+.template-options {
+  grid-column: 1 / -2;
+}
+
+.template-field-row > button {
+  font-size: 11px;
+  padding: 7px 9px;
+}
+
+.template-rule-fields {
+  padding-top: 4px;
+}
+
+.template-empty-main {
+  min-height: 280px;
+}
+
+.workflow-contract {
+  margin-top: 22px;
+  padding: 14px 16px;
+  background: var(--surface-sunken);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+}
+
+.contract-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.analysis-mapping {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.analysis-mapping label {
+  font-size: 11px;
+}
+
+.analysis-stats .panel {
+  padding: 18px;
+}
+
+.analysis-list {
+  border-top: 1px solid var(--line);
+}
+
+.analysis-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.55fr) 1.6fr;
+  gap: 22px;
+  padding: 16px 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.analysis-row b,
+.analysis-row small {
+  display: block;
+}
+
+.analysis-row p {
+  margin: 0 0 8px;
+  color: var(--text);
+}
+
+.analysis-row p small {
+  margin: 4px 0 0 4px;
+}
+
+.filter-row {
+  padding: 12px 0;
+}
+
+.ai-link-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.ai-link-grid article {
+  border: 1px solid var(--line);
+  padding: 16px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--sh-1);
+}
+
+.ai-link-grid small {
+  display: block;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
+
+.demo-kit {
+  background: var(--brand-50);
+  border-color: var(--brand-200);
+}
+
+.demo-kit .section-title {
+  margin-bottom: 18px;
+}
+
+.demo-kit .section-title h2 {
+  margin: 6px 0 0;
+}
+
+.demo-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.demo-steps span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.demo-steps b {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--brand-100);
+  color: var(--brand-700);
+  font-size: 11px;
+}
+
+.demo-case-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.demo-case {
+  display: flex;
+  min-height: 124px;
+  padding: 17px;
+  text-align: left;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  border-radius: var(--r-md);
+}
+
+.demo-case span {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.demo-case small {
+  line-height: 1.6;
+}
+
+.demo-case b {
+  margin-top: auto;
+  color: var(--brand-500);
+  font-size: 12px;
+}
+
+.demo-case.active {
+  border-color: var(--brand-500);
+  background: var(--brand-50);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.demo-safety-note {
+  margin: 13px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.demo-file-lock {
+  margin: 18px 0 12px;
+  padding: 10px 13px;
+  border: 1px solid var(--brand-200);
+  border-radius: var(--r-md);
+  background: var(--brand-50);
+  color: var(--brand-600);
+  font-size: 12px;
+}
+
+.demo-complete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--brand-200);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+
+.demo-complete b,
+.demo-complete span {
+  display: block;
+}
+
+.demo-complete span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ---------- 表格：改为横向分隔线，去掉网格感 ---------- */
+
+td,
+th {
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: var(--surface-sunken);
+  color: var(--muted);
+  font-weight: 600;
+  border-bottom-color: var(--line);
+}
+
+@media (min-width: 1600px) {
+  main {
+    padding: 40px 52px 0;
+  }
+  .task-card {
+    min-height: 255px;
+    padding: 26px;
+  }
+  .page-heading {
+    padding-bottom: 32px;
+  }
+}
+
+@media (max-width: 1150px) {
+  .sidebar {
+    width: 170px;
+    padding: 24px 12px;
+  }
+  .workspace {
+    margin-left: 170px;
+  }
+  .topbar {
+    padding: 0 22px;
+  }
+  .privacy-banner {
+    padding: 10px 22px;
+  }
+  main {
+    padding: 24px 22px 0;
+  }
+  .task-grid {
+    gap: 14px;
+  }
+  .task-card {
+    padding: 18px;
+  }
+  .task-card h2 {
+    font-size: 17px;
+  }
+  .top-actions {
+    gap: 1px;
+  }
+  .analysis-mapping {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .template-field-row {
+    grid-template-columns: 1fr 0.75fr 0.75fr auto;
+  }
+  .template-field-row > button {
+    grid-column: 4;
+  }
+  .template-options {
+    grid-column: 1 / 4;
+  }
+}
+
+@media (max-width: 850px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    padding: 12px 18px;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    overflow: auto;
+  }
+  .brand {
+    margin: 0 14px 0 0;
+    white-space: nowrap;
+    font-size: 15px;
+  }
+  .brand img {
+    width: 32px;
+    height: 32px;
+  }
+  .brand-sub,
+  .sidebar-label,
+  .sidebar-bottom {
+    display: none;
+  }
+  .nav {
+    margin: 0;
+    white-space: nowrap;
+    font-size: 12px;
+    padding: 8px;
+  }
+  .app-shell {
+    display: block;
+  }
+  .workspace {
+    margin: 0;
+  }
+  .topbar {
+    height: auto;
+    min-height: 62px;
+    flex-wrap: wrap;
+    padding: 12px 18px;
+    gap: 10px;
+  }
+  .task-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .home-bottom {
+    grid-template-columns: 1fr;
+  }
+  .field-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .privacy-banner {
+    padding: 10px 18px;
+  }
+  .privacy-banner > .badge {
+    display: none;
+  }
+  .workflow-layout,
+  .contract-grid {
+    grid-template-columns: 1fr;
+  }
+  .workflow-catalog {
+    position: static;
+    max-height: none;
+  }
+  .template-field-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .template-field-row > button,
+  .template-options {
+    grid-column: auto;
+  }
+  .template-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .analysis-mapping,
+  .ai-link-grid,
+  .demo-case-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .demo-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 550px) {
+  main {
+    padding: 20px 16px 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  .task-grid,
+  .comparison,
+  .finding,
+  .field-grid.two,
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .section-title,
+  .input-footer,
+  .demo-banner,
+  .demo-complete {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .inline-form {
+    flex-wrap: wrap;
+  }
+  .panel {
+    padding: 18px;
+  }
+  .finding {
+    gap: 14px;
+  }
+  .task-card {
+    min-height: 190px;
+  }
+  .sidebar .nav {
+    padding: 8px 6px;
+  }
+  .top-actions {
+    flex-wrap: wrap;
+  }
+  .comparison h3 {
+    flex-wrap: wrap;
+  }
+  .template-list,
+  .analysis-mapping,
+  .ai-link-grid,
+  .demo-case-grid,
+  .analysis-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- 花名册模板下载 ---------- */
+
+/* .button-row 自带 12px 上外边距，塞进 .section-title 会把按钮压得比标题低一行；
+   这里用独立类，保持与标题同一水平线。 */
+.roster-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+}
+
+.roster-actions button {
+  font-size: 12px;
+  padding: 6px 11px;
+}
+
+/* 模板说明：用发丝线标记，和 .notice 的警示语义区分开 */
+.template-hint {
+  margin: 0 0 14px;
+  padding: 9px 12px;
+  border-left: 2px solid var(--line-strong);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}

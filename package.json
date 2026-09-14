@@ -1,0 +1,53 @@
+{
+  "name": "counselor-ai-workbench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:pdf": "node scripts/prepare-pdf-assets.mjs",
+    "predev": "npm run prepare:pdf",
+    "dev": "vite --host 127.0.0.1",
+    "prebuild": "npm run prepare:pdf",
+    "build": "tsc -b && vite build",
+    "build:desktop": "npm run prepare:pdf && tsc -b && vite build --mode desktop",
+    "desktop:build": "tauri build --bundles app,dmg",
+    "desktop:dmg": "bash scripts/package-dmg.sh",
+    "desktop:dmg:only": "bash scripts/package-dmg.sh --no-build",
+    "desktop:dmg:univ": "bash scripts/package-dmg.sh --target universal-apple-darwin",
+    "desktop:dmg:univ:only": "bash scripts/package-dmg.sh --no-build --target universal-apple-darwin",
+    "desktop:win": "bash scripts/package-nsis.sh",
+    "desktop:build:win": "tauri build --bundles nsis",
+    "desktop:dev": "tauri dev",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run",
+    "test:browser": "playwright test",
+    "test:browser:webkit": "playwright test --browser=webkit",
+    "check": "npm test && npm run build",
+    "format": "prettier --write src tests scripts *.ts"
+  },
+  "dependencies": {
+    "mammoth": "^1.11.0",
+    "pdfjs-dist": "^6.2.108",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@tauri-apps/cli": "^2.11.4",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.2",
+    "fake-indexeddb": "^6.1.0",
+    "fflate": "^0.8.2",
+    "prettier": "^3.9.6",
+    "typescript": "~5.9.2",
+    "vite": "^7.1.3",
+    "vite-plugin-pwa": "^1.0.3",
+    "vitest": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}
