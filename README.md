@@ -109,7 +109,7 @@ npm run test:browser:webkit
 npm audit
 ```
 
-维护前请先阅读 [AGENTS.md](./AGENTS.md)、[PRD.md](./PRD.md) 和 [docs/HANDOFF.md](./docs/HANDOFF.md)。历史迁移资料统一保存在 `docs/archive/v1/`，不作为当前需求来源。
+使用方法见 [docs/USER_GUIDE.md](./docs/USER_GUIDE.md)（使用文档）。维护前请先阅读 [AGENTS.md](./AGENTS.md)、[PRD.md](./PRD.md) 和 [docs/HANDOFF.md](./docs/HANDOFF.md)。历史迁移资料统一保存在 `docs/archive/v1/`，不作为当前需求来源。
 
 ## License
 
